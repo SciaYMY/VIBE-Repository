@@ -10,8 +10,39 @@
     <link rel='stylesheet' type="text/css" href='css/reset.css'>
 	<link rel='stylesheet' type="text/css" href='css/login.css'>
 
-	<script src="js/login.js" defer></script>
+    <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
+	<!-- <script src="js/login.js" defer></script> -->
+    <script>
+        var checkLoginStatus = function(response) {   // Called after the JS SDK has been initialized.
+            console.log(response);
+            // statusChangeCallback(response);        // Returns the login status.
+            if(response.status==='connected'){
+                document.querySelector('#authBtn').value='Facebook계정 로그아웃'
+            } else {
+                document.querySelector('#authBtn').value='Facebook계정 로그인'
+            }
+        };
 
+        window.fbAsyncInit = function() {
+            FB.init({
+            appId      : '272792178258346',
+            cookie     : true,                     // Enable cookies to allow the server to access the session.
+            xfbml      : true,                     // Parse social plugins on this webpage.
+            version    : 'v12.0'           // Use this Graph API version for this call.
+            });
+
+            FB.getLoginStatus(checkLoginStatus);
+        };
+
+        // Load the JavaScript SDK asynchronously
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
 </head>
 <body>
     <div id="wrap">
@@ -31,6 +62,21 @@
                     <button class="facebook">
                         <a href="#"><img src="./img/SVG/facebookLogo.svg" alt="" width="23"><span>Facebook계정 로그인</span></a>
                     </button>
+                    <input class="facebook" id="authBtn" value="Checking..."  onclick="
+                        if(this.value==='Facebook계정 로그인'){
+                            //now logout
+                            FB.login(function(res){
+                                console.log('login =>', res);
+                                checkLoginStatus(res);
+                            })
+                        } else {
+                            //now login
+                            FB.logout(function(res){
+                                console.log('logout =>', res)
+                                checkLoginStatus(res);
+                            })
+                        }
+                    "></input>
                 </div>
                 <a href="#"><p>회원가입</p></a>
             </div>
