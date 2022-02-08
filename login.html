@@ -25,7 +25,7 @@
 
         window.fbAsyncInit = function() {
             FB.init({
-            appId      : '272792178258346',
+            appId      : '439021997905677',
             cookie     : true,                     // Enable cookies to allow the server to access the session.
             xfbml      : true,                     // Parse social plugins on this webpage.
             version    : 'v12.0'           // Use this Graph API version for this call.
@@ -68,15 +68,19 @@
                             FB.login(function(res){
                                 console.log('login =>', res);
                                 checkLoginStatus(res);
+                                FB.api('/me',function(resp){
+                                    document.querySelector('#name').innerHTML=resp.name;
+                                })
                             })
                         } else {
                             //now login
                             FB.logout(function(res){
                                 console.log('logout =>', res)
                                 checkLoginStatus(res);
+                                document.querySelector('#name').innerHTML='';
                             })
                         }
-                    "></input>
+                    "></input><span id="name"></span>
                 </div>
                 <a href="#"><p>회원가입</p></a>
             </div>
